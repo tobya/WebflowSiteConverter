@@ -8,6 +8,7 @@ use voku\helper\SimpleHtmlDomInterface;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
 use Tobya\WebflowSiteConverter\Transformers\URLTransformer;
+use Tobya\WebflowSiteConverter\Transformers\LinkTransformer;
 
 
 class TransformLinks extends Command
