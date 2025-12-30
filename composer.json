@@ -1,17 +1,17 @@
 {
-    "name": ":vendor_slug/:package_slug",
-    "description": ":package_description",
+    "name": "tobya/webflowsiteconverter",
+    "description": "Convert exported Webflow Site to a usable blade site",
     "keywords": [
-        ":vendor_name",
+        "Tobya",
         "laravel",
-        ":package_slug"
+        "webflowsiteconverter"
     ],
-    "homepage": "https://github.com/:vendor_slug/:package_slug",
+    "homepage": "https://github.com/tobya/webflowsiteconverter",
     "license": "MIT",
     "authors": [
         {
-            "name": ":author_name",
-            "email": "author@domain.com",
+            "name": "Toby Allen",
+            "email": "toby@cookingisfun.ie",
             "role": "Developer"
         }
     ],
@@ -35,13 +35,13 @@
     },
     "autoload": {
         "psr-4": {
-            "VendorName\\Skeleton\\": "src/",
-            "VendorName\\Skeleton\\Database\\Factories\\": "database/factories/"
+            "Tobya\\WebflowSiteConverter\\": "src/",
+            "Tobya\\WebflowSiteConverter\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VendorName\\Skeleton\\Tests\\": "tests/",
+            "Tobya\\WebflowSiteConverter\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
@@ -63,10 +63,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "VendorName\\Skeleton\\SkeletonServiceProvider"
+                "Tobya\\WebflowSiteConverter\\WebflowSiteConverterServiceProvider"
             ],
             "aliases": {
-                "Skeleton": "VendorName\\Skeleton\\Facades\\Skeleton"
+                "WebflowSiteConverter": "Tobya\\WebflowSiteConverter\\Facades\\WebflowSiteConverter"
             }
         }
     },
