@@ -7,9 +7,7 @@ use Illuminate\Console\Command;
 use voku\helper\SimpleHtmlDomInterface;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
-use function App\Console\Commands\Str;
-use function App\Console\Commands\now;
-use function App\Console\Commands\collect;
+
 
 class TransformLinks extends Command
 {
@@ -18,7 +16,7 @@ class TransformLinks extends Command
      *
      * @var string
      */
-    protected $signature = 'webflow:transform2';
+    protected $signature = 'webflow:transform3';
 
     /**
      * The console command description.
@@ -102,9 +100,6 @@ class TransformLinks extends Command
                           ),
                           0777, true);
                     }
-
-
-
 
                 if ($this->move_images){
 
