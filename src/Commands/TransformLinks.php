@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use voku\helper\SimpleHtmlDomInterface;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
+use Tobya\WebflowSiteConverter\Transformers\URLTransformer;
 
 
 class TransformLinks extends Command
@@ -144,9 +145,7 @@ class TransformLinks extends Command
                 }
 
                 if (Str($allAttributes['href'])->startsWith(['/','http://','https://']) === false){
-                    $l->href = '/'.Str($allAttributes['href'])
-                            ->replace('.html','')
-                            ->replace('../','');
+                    $l->href = LinkTransformer::transform($allAttributes['href']);
                 }
 
             }

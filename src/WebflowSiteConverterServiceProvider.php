@@ -20,7 +20,7 @@ class WebflowSiteConverterServiceProvider extends PackageServiceProvider
             ->name('webflowsiteconverter')
             ->hasConfigFile()
             ->hasViews()
-            ->hasMigration('create_webflowsiteconverter_table')
+            //->hasMigration('create_webflowsiteconverter_table')
             ->hasCommand(TransformLinks::class);
     }
 }
