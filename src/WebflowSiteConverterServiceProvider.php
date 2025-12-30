@@ -4,6 +4,7 @@ namespace Tobya\WebflowSiteConverter;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
+use Tobya\WebflowSiteConverter\Commands\TransformLinks;
 use Tobya\WebflowSiteConverter\Commands\WebflowSiteConverterCommand;
 
 class WebflowSiteConverterServiceProvider extends PackageServiceProvider
@@ -20,6 +21,6 @@ class WebflowSiteConverterServiceProvider extends PackageServiceProvider
             ->hasConfigFile()
             ->hasViews()
             ->hasMigration('create_webflowsiteconverter_table')
-            ->hasCommand(WebflowSiteConverterCommand::class);
+            ->hasCommand(TransformLinks::class);
     }
 }
