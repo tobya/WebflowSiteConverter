@@ -9,6 +9,6 @@
 
       public static function transform(string $url) : Stringable
       {
-          return  Str('/'. $url)->replace('../','');
+          return  Str('/777/'. $url)->replace('../','');
       }
   }
