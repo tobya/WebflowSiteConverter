@@ -18,7 +18,7 @@ class TransformLinks extends Command
      *
      * @var string
      */
-    protected $signature = 'webflow:transform3';
+    protected $signature = 'webflow:transform5';
 
     /**
      * The console command description.
