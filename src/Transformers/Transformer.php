@@ -1,8 +1,5 @@
 <?php
 
-  namespace Tobya\WebflowSiteConverter\Transformers;
+namespace Tobya\WebflowSiteConverter\Transformers;
 
-  class Transformer
-  {
-
-  }
+class Transformer {}
