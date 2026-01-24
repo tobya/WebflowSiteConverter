@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use voku\helper\SimpleHtmlDomInterface;
 use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Support\Facades\Storage;
+use Tobya\WebflowSiteConverter\Services\StorageService;
 use Tobya\WebflowSiteConverter\Transformers\URLTransformer;
 use Tobya\WebflowSiteConverter\Transformers\LinkTransformer;
 
@@ -18,14 +19,14 @@ class TransformLinks extends Command
      *
      * @var string
      */
-    protected $signature = 'webflow:transform5';
+    protected $signature = 'webflow:transform';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Clearn webflow output';
+    protected $description = 'Clean webflow output';
 
     protected $timelock;
 
@@ -43,14 +44,18 @@ class TransformLinks extends Command
     {
 
 
-        $this->st_wf_core = Storage::disk('websitecore');
-        $this->st_wf_output_main =    storage::disk('output');
-        $this->st_wf_output_public =    storage::disk('public');
+     //   $this->st_wf_core = Storage::disk('websitecore');
+     //   $this->st_wf_output_main =    storage::disk('output');
+     //   $this->st_wf_output_public =    storage::disk('public');
+
+        $this->st_wf_core = StorageService::retrieveStorageDisk(config('webflow-site-converter.disks.input'));
+        $this->st_wf_output_main =    StorageService::retrieveStorageDisk(config('webflow-site-converter.disks.output'));
+        $this->st_wf_output_public =  StorageService::retrieveStorageDisk(config('webflow-site-converter.disks.public'));
 
        // $this->move_images = false;
 
         $allfiles = $this->st_wf_core->allFiles();
-
+       // $this->info(print_r($allfiles, true));
         //$this->timelock = 'a'; // now()->format('md-Hi');
 
         collect($allfiles)->each(function($f)  {

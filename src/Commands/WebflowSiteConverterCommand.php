@@ -6,13 +6,12 @@ use Illuminate\Console\Command;
 
 class WebflowSiteConverterCommand extends Command
 {
-    public $signature = 'webflowsiteconverter';
+    public $signature = 'blalskdjfaslfdkj';
 
-    public $description = 'My command';
+    public $description = 'Transforms the files output from Webflow to a blade site.';
 
     public function handle(): int
     {
-        $this->comment('All done');
 
         return self::SUCCESS;
     }
