@@ -5,15 +5,40 @@
 [![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/tobya/webflowsiteconverter/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/tobya/webflowsiteconverter/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/tobya/webflowsiteconverter.svg?style=flat-square)](https://packagist.org/packages/tobya/webflowsiteconverter)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+Webflow is a no code (or low code) generator site which is really amazing from a design point of view and 
+allows you to really rapidly generate wonderful looking sites.
+
+However, if it is a very small, or simple site then webflow monthly fees can get a bit out of hand. 
+Webflow provide a simple way to export your html, css and js from their system. I have 
+previously tried to export this zip file and view it. It works fine as a static local
+html site but has various issues if you wish to transform it into a blade views for a laravel site.
+
+This project will take a set of files from an exported webflow project and do the following
+
+- Convert all `.html` files to `blade.php` files
+- Copy all other files (.js .css .jpg .jpeg .png .ttf etc) to your public directory for loading
+- Convert all `href` and other urls from relative eg `about.html` to fixed routes `/about`
+- Convert all script tags to fixed uris pointing to the copy in your public directory
+- Convert all css link tags to fixed uris pointing to the copy in your public directory
+- Convert all relative # tags to fixed on the route eg `about.html#Contact` to `/about#Contact`
+
+### Additional Options
+- You can extract a section via a css selector and replace with a snippet
+
+This will pull out the innerhtml from a tag with the container1 class and replace
+it with the include allowing you to put your own content in these sections.  Additionally
+these are all extracted to seperate files so you can check changes.
+
+````php
+    $this->extractsection('.container1',"@include('containers.main')");
+````
+
+
+
 
 ## Support us
 
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/WebflowSiteConverter.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/WebflowSiteConverter)
-com
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+Delighed with any sponsors
 
 ## Installation
 
@@ -23,24 +48,47 @@ You can install the package via composer:
 composer require tobya/webflowsiteconverter
 ```
 
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="webflowsiteconverter-migrations"
-php artisan migrate
-```
-
 You can publish the config file with:
 
 ```bash
-php artisan vendor:publish --tag="webflowsiteconverter-config"
+php artisan vendor:publish --tag="webflow-site-converter-config"
 ```
 
 This is the contents of the published config file:
 
 ```php
+<?php
+
+// config for Tobya/WebflowSiteConverter
 return [
+
+
+  
+    'transformer' => \Tobya\WebflowSiteConverter\Transformers\SiteTransformer::class,
+
+
+    'disks' => [
+        'input' => [  // disk name or array for build.
+
+            'driver' => 'local',
+            'root' => storage_path('/webflow-core'),
+            ] ,
+
+        'output' => [
+
+            'driver' => 'local',
+            'root' => resource_path('transformed'),
+            ] ,
+        'public' => 
+              [
+            'driver' => 'local',
+            'root' => public_path('/'),
+            ] ,        
+        ],
+
+
 ];
+
 ```
 
 Optionally, you can publish the views using
@@ -51,9 +99,14 @@ php artisan vendor:publish --tag="webflowsiteconverter-views"
 
 ## Usage
 
+````bash
+php artisan webflow:transform
+````
+or
+
 ```php
 $webflowSiteConverter = new Tobya\WebflowSiteConverter();
-echo $webflowSiteConverter->echoPhrase('Hello, Tobya!');
+echo $webflowSiteConverter->transform();
 ```
 
 ## Testing
