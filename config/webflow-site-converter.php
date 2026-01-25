@@ -7,6 +7,14 @@ return [
     'transformer' => \Tobya\WebflowSiteConverter\Transformers\SiteTransformer::class,
 
 
+    'sections' => [
+
+        'extracted-sections-hashed-directory' => 'extracted',
+
+        'extracted-sections-blades' => 'sections',
+    ],
+
+
     'disks' => [
         'input' => [  // disk name or array for build.
 

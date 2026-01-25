@@ -27,6 +27,14 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
 
     public $extractions = [];
 
+    public $debug = false;
+
+    private $current_filename;
+
+
+      public bool $create_section_files = false;
+      public bool $overwrite_section_files = false;
+
       /**
        * @param string $outputPath
        * @param $f
@@ -35,11 +43,8 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
       function processOtherFile(string $outputPath, $f): void
       {
           $this->log( "Copying file to: " . $this->st_wf_output_public->path($outputPath));
-        // if (Str($f)->Contains(['.js', '.css', '.ttf', '.otf',
-        //     '.svg', '.woff', '.woff2', '.jpeg',
-        //     '.jpg', '.png', 'favicon.ico'])) {
-        //     //  continue;
-        //     //dd($outputPath);
+
+
                 // Create Folder in output dir
               if (file_exists(pathinfo($this->st_wf_output_public->path($outputPath), PATHINFO_DIRNAME)) === false) {
                   mkdir(
@@ -49,19 +54,13 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
                       0777, true);
               }
 
-
-
                   $this->log( "Copying file to: " . $this->st_wf_output_public->path($outputPath) );
 
-                    // copy file to public path
+                  // copy file to public path
                   copy($this->st_wf_core->path($f),
                       $this->st_wf_output_public->path($outputPath));
 
 
-              // echo "other file;\n";
-              //    die();
-
-        //  }
       }
 
       /**
@@ -113,13 +112,14 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
 
         collect($allfiles)->each(function($f)  {
 
+            $this->current_filename = $f;
             // the file will be output to same relative path.
             $outputPath = '/' .  $f;
 
             if (Str($f)->endsWith( ['.html','.htm'],true)) {
 
                 $this->processHtmlFile($outputPath, $f);
-                $this->extractSections($f);
+                $this->extractAllSections($f);
 
                 // save
                 $this->st_wf_output_main->put(
@@ -192,17 +192,14 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
                 if (isset($allAttributes['srcset']) !== false){
 
 
-                    try{
-//print_r(Str($allAttributes['srcset'])->explode(','));
+
                 $srcset = Str($allAttributes['srcset'])->explode(',')->reduce(function( $line,$item){
 
 
                         return $line . ", @image($item)";
 
                 });
-                    } finally {
-                    echo 'finally';
-                    }
+
                 $l->srcset = $srcset;
                    // dd($srcset);
                 }
@@ -217,6 +214,48 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
          return $this->doc->html();
     }
 
+    public function extractSectionAsBlade($selector, callable | null $content = null)
+    {
+        $this->log( "Extracting section as Blade: $selector");
+
+        foreach($this->doc->find( $selector ) as $div){
+            $this->log('Found section: ');
+            $html = $div->innerhtml;
+            $this->log($html);
+
+            // Many sections on separate pages may be identical so hash to deduplicate.
+            $hash = sha1($html);
+
+
+            // store section
+            $this->st_wf_output_main->put("/extracted/{$selector}_extracted_{$hash}.html",   $html );
+
+            /**
+             * Just testing here at the moment.
+             * Wondering what to do about creating sections.  Currently including name of fn as a sub folder.
+             * this creates a seperate file for each section from each file.
+             * This would help to create a set of files that could be changed.
+             *
+             * or could go back to just creating first.
+             */
+
+
+                    $safename = Str($selector)->slug('');
+                    $safefn = Str($this->current_filename)->slug('');
+                    $this->st_wf_output_main->put("/sections/{$safefn}/{$safename}.blade.php", $html );
+                  //  $this->st_wf_output_main->put("/sections/{$safename}.{$this->current_filename} .blade.php", $this->current_filename . "\n\n\nafdasfd" . $html,[] );
+
+
+
+            // get replacement text
+            if (is_callable($content)){
+                $div->innerhtml = call_user_func($content, $html);
+            } else {
+                $div->innerhtml = " @include(\"sections.{$safefn}.{$safename}\") ";
+            }
+        }
+    }
+
     public function extractSection($selector, string | callable $replacement, $path) {
 
         $this->log( "Extracting sections: $selector",[$replacement, $path]);
@@ -229,7 +268,10 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
             // Many sections on separate pages may be identical so hash to deduplicate.
             $hash = sha1($html);
 
-            $this->st_wf_output_main->put("/extracted/{$selector}_extracted_{$hash}_$c.html",$html );
+            $this->st_wf_output_main->put("/extracted/{$selector}_extracted_{$hash}.html",$html );
+
+
+
 
             // get replacement text
             if (is_callable($replacement)){
@@ -242,27 +284,7 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
 
     }
 
-    /**
-     * @param HtmlDomParser $this->>doc
-     * @param array $markers
-     * @param $replacement
-     * @return void
-     *
-     * NOT CURRENTLY IN USE
-     */
-    public function extractSectionsByMarkers( array $markers, $replacement) {
 
-        echo "Extracting sections: $class \n";
-        $c = now()->format('iv');
-                foreach($this->doc->find( $class ) as $div){
-                $hash = sha1($div->innerhtml);
-                $this->st_wf_output_main->put("/extracted/{$class}_extracted_{$hash}_$c.html",$div->innerhtml );
-
-                    $div->innerhtml = $replacement;
-                }
-
-
-    }
 
     public function change_fileext($filename, $new_extension) {
         $info = pathinfo($filename);
@@ -274,6 +296,10 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
 
     public function log($value, $data = null, $level = LogLevel::DEBUG)
     {
+        if ($this->debug == false){
+            return ;
+        }
+
         if (is_array($data)) {
             Log::log($level, $value, $data);
         }
@@ -283,7 +309,7 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
 
     }
 
-    private function extractSections($filepath)
+    private function extractAllSections($filepath)
     {
         foreach($this->extractions as $extraction){
             $this->extractSection($extraction[0], $extraction[1], $filepath);
