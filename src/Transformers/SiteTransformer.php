@@ -84,9 +84,7 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
 
           // Transform links and save to output dir
           $this->TransformLinks($this->st_wf_core->get($f), $f);
-          $this->st_wf_output_main->put(
-                    $this->change_fileext($outputPath, 'blade.php'), $this->getHTMLFileContent()
-                );
+
       }
 
 
@@ -121,6 +119,10 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
                 $this->processHtmlFile($outputPath, $f);
                 $this->extractSections($f);
 
+                // save 
+                $this->st_wf_output_main->put(
+                    $this->change_fileext($outputPath, 'blade.php'), $this->getHTMLFileContent()
+                );
             } else {
                 $this->processOtherFile($outputPath, $f);
             }
@@ -206,11 +208,6 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
 
             }
 
-
-
-
-
-
     }
 
     public function getHTMLFileContent()
@@ -218,18 +215,27 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
          return $this->doc->html();
     }
 
-    public function extractSection( $class, $replacement, $path) {
+    public function extractSection($selector, string | callable $replacement, $path) {
 
-        echo "Extracting sections: $class \n";
+        $this->log( "Extracting sections: $selector",[$replacement, $path]);
         $c = now()->format('iv');
-                foreach($this->doc->find( $class ) as $div){
-                $hash = sha1($div->innerhtml);
-                $html = $div->innerhtml;
-            //    $html =  "################# \n $path \n \n ############## \n " . $html;
-                $this->st_wf_output_main->put("/extracted/{$class}_extracted_{$hash}_$c.html",$html );
+        foreach($this->doc->find( $selector ) as $div){
+            $this->log('Found section: ');
+            $html = $div->innerhtml;
+            $this->log($html);
 
-                    $div->innerhtml = $replacement;
-                }
+            // Many sections on seperate pages may be identical so hash to deduplicate.
+            $hash = sha1($html);
+
+            $this->st_wf_output_main->put("/extracted/{$selector}_extracted_{$hash}_$c.html",$html );
+
+            // get replacement text
+            if (is_callable($replacement)){
+                call_user_func($replacement, $html);
+            } else {
+                $div->innerhtml = $replacement;
+            }
+        }
 
 
     }
