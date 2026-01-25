@@ -4,9 +4,8 @@ namespace Tobya\WebflowSiteConverter;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Tobya\WebflowSiteConverter\Commands\TransformLinks;
 use Tobya\WebflowSiteConverter\Commands\TransformationDisksCommand;
-use Tobya\WebflowSiteConverter\Commands\WebflowSiteConverterCommand;
+use Tobya\WebflowSiteConverter\Commands\TransformLinks;
 
 class WebflowSiteConverterServiceProvider extends PackageServiceProvider
 {
@@ -21,11 +20,9 @@ class WebflowSiteConverterServiceProvider extends PackageServiceProvider
             ->name('webflow-site-converter')
             ->hasConfigFile()
             ->hasViews()
-            //->hasMigration('create_webflowsiteconverter_table')
+            // ->hasMigration('create_webflowsiteconverter_table')
 
             ->hasCommand(TransformLinks::class)
-            ->hasCommand(TransformationDisksCommand::class)
-
-        ;
+            ->hasCommand(TransformationDisksCommand::class);
     }
 }
