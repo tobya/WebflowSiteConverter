@@ -1,8 +1,8 @@
 <?php
 
-  namespace Tobya\WebflowSiteConverter\Transformers;
+namespace Tobya\WebflowSiteConverter\Transformers;
 
-  use Illuminate\Support\Stringable;
+use Illuminate\Support\Stringable;
 
   class URLTransformer extends Transformer
   {
