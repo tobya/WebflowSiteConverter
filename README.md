@@ -33,7 +33,20 @@ these are all extracted to seperate files so you can check changes.
     $this->extractsection('.container1',"@include('containers.main')");
 ````
 
+### Route
 
+If you have a simple site that only needs the pages to be linked up correctly, you
+can call a simple route function and your site will work out of the box.
+
+> Route::webflow();
+
+For anything more complex you can create routes and controllers as you normally would.
+
+
+### Rerunning
+
+This project has also been designed to allow you to export your data multiple times.
+As the project is overwritten you can diff the changes and update.  Thsi is 
 
 
 ## Support us
@@ -109,6 +122,22 @@ $webflowSiteConverter = new Tobya\WebflowSiteConverter();
 echo $webflowSiteConverter->transform();
 ```
 
+## Routes
+
+Once you have transformed your webflow site, you can create routes and controllers
+as normal using the new blade components.
+
+If you wish to have a site up and running immediately, you can use a single route that 
+will catch all non registered routes
+
+`````php
+
+Route::webflow();
+
+`````
+
+This will serve your new blade templates directly.
+
 ## Testing
 
 ```bash
@@ -131,7 +160,12 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 - [Toby Allen](https://github.com/tobya)
 - [All Contributors](../../contributors)
+- Webflow
 
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+## Webflow
+
+'Webflow' is a registered Trademark of Webflow Inc.  
