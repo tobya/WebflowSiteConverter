@@ -25,6 +25,8 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
 
     protected bool $move_images = true;
 
+    public $extractions = [];
+
       /**
        * @param string $outputPath
        * @param $f
@@ -278,6 +280,15 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
         else {
             Log::log($level, $value);
         }
+
+    }
+
+    private function extractSections($filepath)
+    {
+        foreach($this->extractions as $extraction){
+            $this->extractSection($extraction[0], $extraction[1], $filepath);
+        }
+        $this->ExtractSections($filepath);
 
     }
 
