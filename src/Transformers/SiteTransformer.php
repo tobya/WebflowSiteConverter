@@ -119,7 +119,7 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
                 $this->processHtmlFile($outputPath, $f);
                 $this->extractSections($f);
 
-                // save 
+                // save
                 $this->st_wf_output_main->put(
                     $this->change_fileext($outputPath, 'blade.php'), $this->getHTMLFileContent()
                 );
@@ -224,14 +224,14 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
             $html = $div->innerhtml;
             $this->log($html);
 
-            // Many sections on seperate pages may be identical so hash to deduplicate.
+            // Many sections on separate pages may be identical so hash to deduplicate.
             $hash = sha1($html);
 
             $this->st_wf_output_main->put("/extracted/{$selector}_extracted_{$hash}_$c.html",$html );
 
             // get replacement text
             if (is_callable($replacement)){
-                call_user_func($replacement, $html);
+                $div->innerhtml = call_user_func($replacement, $html);
             } else {
                 $div->innerhtml = $replacement;
             }
