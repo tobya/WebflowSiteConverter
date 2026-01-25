@@ -4,7 +4,7 @@
 return [
 
 
-
+    'transformer' => \Tobya\WebflowSiteConverter\Transformers\SiteTransformer::class,
 
 
     'disks' => [
