@@ -55,11 +55,17 @@ return [
 
 
 
-    'sections' => [
+  'sections' => [
 
-        'extracted-sections-hashed-directory' => 'extracted',
+      'dirs' => [
 
-        'extracted-sections-blades' => 'sections',
+        'hashed' => 'extracted',
+
+        'blades' => 'sections',
+      ],
+
+
+
     ],
 
 
