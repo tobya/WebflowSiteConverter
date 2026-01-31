@@ -29,7 +29,9 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
 
     public $debug = false;
 
-    private $current_filename;
+    protected $current_filename;
+
+    protected $view_file_ext = '.blade.php';
 
 
       public bool $create_section_files = false;
@@ -100,9 +102,7 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
     private function doTransform()
     {
 
-        $this->st_wf_core = StorageService::retrieveStorageDisk(config('webflow-site-converter.disks.input'));
-        $this->st_wf_output_main =    StorageService::retrieveStorageDisk(config('webflow-site-converter.disks.output'));
-        $this->st_wf_output_public =  StorageService::retrieveStorageDisk(config('webflow-site-converter.disks.public'));
+       $this->retrieveDisks();
 
        // $this->move_images = false;
 
@@ -123,7 +123,7 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
 
                 // save
                 $this->st_wf_output_main->put(
-                    $this->change_fileext($outputPath, 'blade.php'), $this->getHTMLFileContent()
+                    $this->change_fileext($outputPath, $this->view_file_ext), $this->getHTMLFileContent()
                 );
             } else {
                 $this->processOtherFile($outputPath, $f);
@@ -242,7 +242,7 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
 
                     $safename = Str($selector)->slug('');
                     $safefn = Str($this->current_filename)->slug('');
-                    $this->st_wf_output_main->put("/sections/{$safefn}/{$safename}.blade.php", $html );
+                    $this->st_wf_output_main->put("/sections/{$safefn}/{$safename}{$this->view_file_ext}", $html );
                   //  $this->st_wf_output_main->put("/sections/{$safename}.{$this->current_filename} .blade.php", $this->current_filename . "\n\n\nafdasfd" . $html,[] );
 
 
@@ -287,10 +287,14 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
 
 
     public function change_fileext($filename, $new_extension) {
+
+        if (Str($new_extension)->startsWith('.')){
+            $new_extension = substr($new_extension, 1);
+        }
+
         $info = pathinfo($filename);
 
-        echo $info['dirname']."/".$info['filename'] . '.' . $new_extension;
-           return $info['dirname']."/".$info['filename'] . '.' . $new_extension;
+        return $info['dirname']."/".$info['filename'] . '.' . $new_extension;
     }
 
 
@@ -323,9 +327,18 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
 
     }
 
+      /**
+       * Retrieve all disks
+       * @return void
+       */
+      protected function retrieveDisks()
+      {
 
+            $this->st_wf_core = $this->st_wf_core ?? StorageService::retrieveStorageDisk(config('webflow-site-converter.disks.input'));
+            $this->st_wf_output_main =  $this->st_wf_output_main ??   StorageService::retrieveStorageDisk(config('webflow-site-converter.disks.output'));
+            $this->st_wf_output_public = $this->st_wf_output_public ??  StorageService::retrieveStorageDisk(config('webflow-site-converter.disks.public'));
 
-
+      }
 
 
   }

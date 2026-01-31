@@ -20,7 +20,7 @@ class TransformLinks extends Command
      *
      * @var string
      */
-    protected $signature = 'webflow:transform';
+    protected $signature = 'webflow:transform {--html}';
 
     /**
      * The console command description.
@@ -31,7 +31,12 @@ class TransformLinks extends Command
 
     public function handle()
     {
-        $transformer = app(config('webflow-site-converter.transformer'));
+        if($this->option('html')) {
+            $transformer = app(config('webflow-site-converter.html_transformer'));
+        } else {
+            $transformer = app(config('webflow-site-converter.blade_transformer'));
+        }
+
         $transformer->transform();
     }
 }
