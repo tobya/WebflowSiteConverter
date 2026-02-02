@@ -216,6 +216,8 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
 
     public function extractSectionAsBlade($selector, callable | null $content = null)
     {
+
+
         $this->log( "Extracting section as Blade: $selector");
 
         foreach($this->doc->find( $selector ) as $div){
@@ -227,8 +229,6 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
             $hash = sha1($html);
 
 
-            // store section
-            $this->st_wf_output_main->put("/extracted/{$selector}_extracted_{$hash}.html",   $html );
 
             /**
              * Just testing here at the moment.
@@ -238,12 +238,15 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
              *
              * or could go back to just creating first.
              */
+            // store section
+            $this->st_wf_output_main->put("/extracted/{$selector}_extracted_{$hash}.html",   $html );
+            $this->st_wf_output_main->put("/extracted/{$selector}_extracted_{$hash}.html",   $html );
 
 
-                    $safename = Str($selector)->slug('');
-                    $safefn = Str($this->current_filename)->slug('');
-                    $this->st_wf_output_main->put("/sections/{$safefn}/{$safename}{$this->view_file_ext}", $html );
-                  //  $this->st_wf_output_main->put("/sections/{$safename}.{$this->current_filename} .blade.php", $this->current_filename . "\n\n\nafdasfd" . $html,[] );
+             $safename = Str($selector )->slug('') . '_' . Str($hash)->substr(0,10);
+             $safefn = Str($this->current_filename)->slug('');
+             $this->st_wf_output_main->put("/sections/{$safename}{$this->view_file_ext}", $html );
+            //  $this->st_wf_output_main->put("/sections/{$safename}.{$this->current_filename} .blade.php", $this->current_filename . "\n\n\nafdasfd" . $html,[] );
 
 
 
@@ -251,7 +254,7 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
             if (is_callable($content)){
                 $div->innerhtml = call_user_func($content, $html);
             } else {
-                $div->innerhtml = " @include(\"sections.{$safefn}.{$safename}\") ";
+                $div->innerhtml = " @include(\"" . config('webflow-site-converter.sections.dirs.blades') . ".{$safename}\") ";
             }
         }
     }
@@ -322,8 +325,9 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
 
     }
 
-    public function extractSections($filepath)
+    public function ExtractSections($filepath)
     {
+
 
     }
 
