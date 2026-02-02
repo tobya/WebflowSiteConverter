@@ -38,7 +38,7 @@ return [
 
             'driver' => 'local',
             'root' => storage_path('/webflow-core'),
-            ] ,
+        ],
 
         'output' => [
 
@@ -52,7 +52,8 @@ return [
                 'root' => public_path('/'),
                 ] ,
         ],
-
+        'public' => 'public', // Use Public disk.
+    ],
 
 
   'sections' => [

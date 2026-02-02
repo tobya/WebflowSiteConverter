@@ -1,18 +1,18 @@
 <?php
 
-  namespace Tobya\WebflowSiteConverter\Services;
+namespace Tobya\WebflowSiteConverter\Services;
 
-  use Illuminate\Support\Facades\Storage;
-  use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Storage;
 
-  class StorageService
-  {
-        public static function retrieveStorageDisk($storageConfig) : Filesystem
-        {
-            if (is_array($storageConfig)){
-                return Storage::build($storageConfig);
-            } else {
-                return Storage::disk($storageConfig);
-            }
+class StorageService
+{
+    public static function retrieveStorageDisk($storageConfig): Filesystem
+    {
+        if (is_array($storageConfig)) {
+            return Storage::build($storageConfig);
+        } else {
+            return Storage::disk($storageConfig);
         }
-  }
+    }
+}
