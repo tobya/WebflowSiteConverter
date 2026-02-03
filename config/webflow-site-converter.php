@@ -52,8 +52,8 @@ return [
                 'root' => public_path('/'),
                 ] ,
         ],
-        'public' => 'public', // Use Public disk.
-    ],
+
+
 
 
   'sections' => [
