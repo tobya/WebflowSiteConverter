@@ -26,6 +26,7 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
     protected bool $move_images = true;
 
     public $extractions = [];
+    public $replacements = [];
 
     public $debug = false;
 
@@ -119,6 +120,7 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
             if (Str($f)->endsWith( ['.html','.htm'],true)) {
 
                 $this->processHtmlFile($outputPath, $f);
+                $this->processReplacements();
                 $this->extractAllSections($f);
 
                 // save
@@ -344,5 +346,18 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
 
       }
 
+
+      protected function processReplacements()
+      {
+          foreach($this->replacements as $replacement){
+             list($selector, $find, $replace) = $replacement;
+
+             $el = $this->doc->find($selector);
+             $html = $el->outerhtml ;
+             Str($html)->replace($find, $replace);
+             $el->outerhtml = $html;
+
+          }
+      }
 
   }
