@@ -195,12 +195,18 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
 
 
 
-                $srcset = Str($allAttributes['srcset'])->explode(',')->reduce(function( $line,$item){
+                $srcset = Str($allAttributes['srcset'])->explode(',')->reduce(
+                        function( $line,$item){
 
+                            $item = '/' .  Str($item)
+                                    ->replace('../../../','',false)
+                                    ->replace('../../','',false)
+                                    ->replace('../','',false);
 
-                        return $line . ", @image($item)";
+                            return $line . ", @image(\"$item\")";
 
-                });
+                        }
+                );
 
                 $l->srcset = $srcset;
                    // dd($srcset);
