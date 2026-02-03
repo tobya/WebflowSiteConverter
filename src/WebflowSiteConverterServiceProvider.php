@@ -2,13 +2,12 @@
 
 namespace Tobya\WebflowSiteConverter;
 
-use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use Tobya\WebflowSiteConverter\Commands\TransformLinks;
 use Tobya\WebflowSiteConverter\Commands\TransformationDisksCommand;
-use Tobya\WebflowSiteConverter\Commands\WebflowSiteConverterCommand;
+use Tobya\WebflowSiteConverter\Commands\TransformLinks;
 
 class WebflowSiteConverterServiceProvider extends PackageServiceProvider
 {
@@ -23,24 +22,20 @@ class WebflowSiteConverterServiceProvider extends PackageServiceProvider
             ->name('webflow-site-converter')
             ->hasConfigFile()
             ->hasViews()
-            //->hasMigration('create_webflowsiteconverter_table')
+            // ->hasMigration('create_webflowsiteconverter_table')
             ->hasCommand(TransformLinks::class)
-            ->hasCommand(TransformationDisksCommand::class)
-
-        ;
-
+            ->hasCommand(TransformationDisksCommand::class);
 
     }
 
     public function packageRegistered()
     {
 
-        Route::macro('webflow',function(){
-            Route::get('/{any}', function ( $any) {
+        Route::macro('webflow', function () {
+            Route::get('/{any}', function ($any) {
                 if (View::exists($any)) {
-                 return view($any,[]);
-                } else
-                {
+                    return view($any, []);
+                } else {
                     abort(404);
                 }
             })->where('any', '.*')->name('any');

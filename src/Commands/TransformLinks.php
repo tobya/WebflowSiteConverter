@@ -22,7 +22,7 @@ class TransformLinks extends Command
 
     public function handle()
     {
-        if($this->option('html') == true) {
+        if ($this->option('html') == true) {
             $transformer = app(config('webflow-site-converter.html_transformer'));
         } else {
             $transformer = app(config('webflow-site-converter.blade_transformer'));
