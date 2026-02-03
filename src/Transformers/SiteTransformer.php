@@ -356,12 +356,25 @@ use Tobya\WebflowSiteConverter\Services\StorageService;
       protected function processReplacements()
       {
           foreach($this->replacements as $replacement){
-             list($selector, $find, $replace) = $replacement;
 
-             $el = $this->doc->find($selector);
-             $html = $el->outerhtml ;
-             Str($html)->replace($find, $replace);
-             $el->outerhtml = $html;
+             list($selector, $find, $replace) = $replacement;
+              //  echo "\n ----------------\n \n $selector \n \n \n \n";
+             $elements = $this->doc->find($selector);
+             foreach($elements as $element){
+
+                 $html = $element->outertext() ;
+
+                // echo "\n\n :::::::::::::::::::: \n\n";
+               //  echo $html;
+                 $strHtml = Str($html);
+                 if ($strHtml->contains($find)){
+                     $html = $strHtml->replace($find, $replace, false)->toString();
+                   //  echo "\n\n --- \n\n";
+                   //  echo $html;
+                   //  echo "\n\n :::::::::::::::::::: \n\n";
+                     $element->outertext = $html;
+                 }
+             }
 
           }
       }
