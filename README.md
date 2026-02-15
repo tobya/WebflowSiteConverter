@@ -21,6 +21,7 @@ This project will take a set of files from an exported webflow project and do th
 - Convert all script tags to fixed uris pointing to the copy in your public directory
 - Convert all css link tags to fixed uris pointing to the copy in your public directory
 - Convert all relative # tags to fixed on the route eg `about.html#Contact` to `/about#Contact`
+- Convert simpley HTML site. Will simply import html files, css, js and images to public directory.  will rewrite all relative urls to start with '/'
 
 ### In Development
 
