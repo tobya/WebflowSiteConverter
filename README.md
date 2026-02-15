@@ -22,6 +22,10 @@ This project will take a set of files from an exported webflow project and do th
 - Convert all css link tags to fixed uris pointing to the copy in your public directory
 - Convert all relative # tags to fixed on the route eg `about.html#Contact` to `/about#Contact`
 
+### In Development
+
+This project is  still in active development and may have (quite) a few rough edges.  I am adding features as required for the few sites I use it on.  Delighted with an help, PRs , Issues, discussions.
+
 ### Additional Options
 - You can extract a section via a css selector and replace with a snippet
 
