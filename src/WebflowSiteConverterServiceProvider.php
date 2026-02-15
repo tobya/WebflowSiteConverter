@@ -21,7 +21,7 @@ class WebflowSiteConverterServiceProvider extends PackageServiceProvider
         $package
             ->name('webflow-site-converter')
             ->hasConfigFile()
-            ->hasViews()
+          // ->hasViews()
             // ->hasMigration('create_webflowsiteconverter_table')
             ->hasCommand(TransformLinks::class)
             ->hasCommand(TransformationDisksCommand::class);
