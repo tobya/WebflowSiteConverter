@@ -1,6 +1,5 @@
 <?php
 
-
 return [
 
     /*
@@ -18,8 +17,6 @@ return [
     'blade_transformer' => \Tobya\WebflowSiteConverter\Transformers\SiteTransformer::class,
 
     'html_transformer' => \Tobya\WebflowSiteConverter\Transformers\HtmlTransformer::class,
-
-
 
     /*
     |--------------------------------------------------------------------------
@@ -44,31 +41,24 @@ return [
 
             'driver' => 'local',
             'root' => resource_path('/views'),
-            ] ,
+        ],
         'public' =>  // Use root Public dir.
              [
 
-                'driver' => 'local',
-                'root' => public_path('/'),
-                ] ,
-        ],
-
-
-
-
-  'sections' => [
-
-      'dirs' => [
-
-        'hashed' => 'extracted',
-
-        'blades' => 'sections',
-      ],
-
-
-
+                 'driver' => 'local',
+                 'root' => public_path('/'),
+             ],
     ],
 
+    'sections' => [
 
+        'dirs' => [
+
+            'hashed' => 'extracted',
+
+            'blades' => 'sections',
+        ],
+
+    ],
 
 ];
