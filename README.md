@@ -120,12 +120,12 @@ php artisan vendor:publish --tag="webflowsiteconverter-views"
 ````bash
 php artisan webflow:transform
 ````
-or
 
-```php
-$webflowSiteConverter = new Tobya\WebflowSiteConverter();
-echo $webflowSiteConverter->transform();
-```
+or to use for a simple html site
+
+````bash
+php artisan webflow:transform --html
+````
 
 ## Routes
 
