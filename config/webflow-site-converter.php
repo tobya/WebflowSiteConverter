@@ -9,14 +9,14 @@ return [
     |
     | The class that is used to transform your site files.
     | By Default this is the built in SiteTransformer
-    | If you with to costomise you can provide
+    | If you with to customise you can provide
     | a class that descends from this.
     |
     */
 
-    'blade_transformer' => \Tobya\WebflowSiteConverter\Transformers\SiteTransformer::class,
+    'blade_site_transformer' => \Tobya\WebflowSiteConverter\Transformers\SiteTransformer::class,
 
-    'html_transformer' => \Tobya\WebflowSiteConverter\Transformers\HtmlTransformer::class,
+    'html_site_transformer' => \Tobya\WebflowSiteConverter\Transformers\HtmlSiteTransformer::class,
 
     /*
     |--------------------------------------------------------------------------

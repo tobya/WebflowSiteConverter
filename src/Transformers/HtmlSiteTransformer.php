@@ -2,7 +2,7 @@
 
 namespace Tobya\WebflowSiteConverter\Transformers;
 
-class HtmlTransformer extends SiteTransformer
+class HtmlSiteTransformer extends SiteTransformer
 {
     public function __construct()
     {
