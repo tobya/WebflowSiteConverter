@@ -202,6 +202,8 @@ class SiteTransformer
                             ->replace('../../', '', false)
                             ->replace('../', '', false);
 
+                        // returns @image but @image is not yet defined as a blade directive.
+                        // it need stob e.
                         return $line.", @image(\"$item\")";
 
                     }
