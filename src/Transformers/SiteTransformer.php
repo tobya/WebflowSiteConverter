@@ -97,18 +97,29 @@ class SiteTransformer
         collect($allfiles)->each(function ($f) {
 
             $this->current_filename = $f;
+
             // the file will be output to same relative path.
             $outputPath = '/'.$f;
 
+            /*
+             * the core templates are output as html files.  These are the files
+             * that we wish to transform.  Other files such as css, js , png, jpeg
+             * do not need to be modified, just copied to the public directory.
+             */
             if (Str($f)->endsWith(['.html', '.htm'], true)) {
 
+                // make modifications to html
                 $this->processHtmlFile($outputPath, $f);
+
+                // replace any tags or text that needs to be replaced
                 $this->processReplacements();
+
                 $this->extractAllSections($f);
 
                 // save
                 $this->st_wf_output_main->put(
-                    $this->change_fileext($outputPath, $this->view_file_ext), $this->getHTMLFileContent()
+                    $this->change_fileext($outputPath, $this->view_file_ext),
+                    $this->getHTMLFileContent()
                 );
             } else {
                 $this->processOtherFile($outputPath, $f);
@@ -122,15 +133,24 @@ class SiteTransformer
     {
 
         $this->doc = new HtmlDomParser($content);
+
+        // Find all link (not anchors) and transform
+        // <link href="css/normalize.css" rel="stylesheet" type="text/css">
+        // href must be set to an absolute url
         foreach ($this->doc->find('link') as $l) {
             $allAttributes = $l->getAllAttributes();
             echo $allAttributes['href']."\n";
+
+            // if the link tag href does not start with values that make it absolute, then replace relative link
             if (Str($allAttributes['href'])->startsWith(['/', 'http://', 'https://', '#']) === false) {
-                $l->href = '/'.Str($allAttributes['href'])->replace('../', '');
+                $l->href =  URLTransformer::transform($allAttributes['href']);
             }
 
         }
 
+        // for an anchor tag
+        //  <a href="certificate-cookery-course/12-week-certificate-course-overview.html" class="large-link-fallen w-inline-block">
+        // href must be set to an absolute url.
         foreach ($this->doc->find('a') as $l) {
             $allAttributes = $l->getAllAttributes();
 
