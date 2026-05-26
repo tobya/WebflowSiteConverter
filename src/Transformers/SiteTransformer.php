@@ -32,6 +32,7 @@ class SiteTransformer
     protected $current_filename;
 
     protected $view_file_ext = '.blade.php';
+    protected $url_file_ext = '';
 
     public bool $create_section_files = false;
 
@@ -159,7 +160,7 @@ class SiteTransformer
             }
 
             if (Str($allAttributes['href'])->startsWith(['/', 'http://', 'https://', '#']) === false) {
-                $l->href = LinkTransformer::transform($allAttributes['href']);
+                $l->href = LinkTransformer::transform($allAttributes['href'], $this->url_file_ext);
             }
 
         }
