@@ -27,6 +27,9 @@ class SiteTransformer
 
     public $replacements = [];
 
+    // replacements that search text rather than html tags.
+    public $textreplacements = [];
+
     public $debug = false;
 
     protected $current_filename;
@@ -221,7 +224,10 @@ class SiteTransformer
 
     public function getHTMLFileContent()
     {
-        return $this->doc->html();
+        return
+           $this->processTextReplacements(
+            $this->doc->html()
+           );
     }
 
     public function extractSectionAsBlade($selector, ?callable $content = null)
@@ -300,6 +306,32 @@ class SiteTransformer
         return $info['dirname'].'/'.$info['filename'].'.'.$new_extension;
     }
 
+    public function ExtractTextAsBlade($textToExtract,string|callable $replacement, $path)
+    {
+        $this->log("Extracting Text: ", [$replacement, $path]);
+        $c = now()->format('iv');
+
+
+
+        foreach ($this->doc->find($selector) as $div) {
+            $this->log('Found section: ');
+            $html = $div->innerhtml;
+            $this->log($html);
+
+            // Many sections on separate pages may be identical so hash to deduplicate.
+            $hash = sha1($html);
+
+            $this->st_wf_output_main->put("/extracted/{$selector}_extracted_{$hash}.html", $html);
+
+            // get replacement text
+            if (is_callable($replacement)) {
+                $div->innerhtml = call_user_func($replacement, $html);
+            } else {
+                $div->innerhtml = $replacement;
+            }
+        }
+    }
+
     public function log($value, $data = null, $level = LogLevel::DEBUG)
     {
         if ($this->debug == false) {
@@ -349,19 +381,32 @@ class SiteTransformer
             foreach ($elements as $element) {
 
                 $html = $element->outertext();
-
+                  //  echo $html;
+                  //  die();
                 // echo "\n\n :::::::::::::::::::: \n\n";
                 //  echo $html;
                 $strHtml = Str($html);
                 if ($strHtml->contains($find)) {
-                    $html = $strHtml->replace($find, $replace, false)->toString();
+                    echo 'Big Copy ------------------------' . $html;
+                    $html =  $strHtml->replace($find, $replace, false)->toString();
+                    echo 'Big AFTER ------------------------' . $html;
                     //  echo "\n\n --- \n\n";
-                    //  echo $html;
+                      echo $html;
                     //  echo "\n\n :::::::::::::::::::: \n\n";
                     $element->outertext = $html;
                 }
             }
 
         }
+
+
+
+    }
+
+    public function ProcessTextReplacements($html){
+        foreach ($this->textreplacements as $replacement) {
+            $html = Str($html)->replace($replacement[0], $replacement[1], false);
+        }
+        return $html;
     }
 }
