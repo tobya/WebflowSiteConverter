@@ -32,6 +32,7 @@ class SiteTransformer
     protected $current_filename;
 
     protected $view_file_ext = '.blade.php';
+
     protected $url_file_ext = '';
 
     public bool $create_section_files = false;
@@ -144,7 +145,7 @@ class SiteTransformer
 
             // if the link tag href does not start with values that make it absolute, then replace relative link
             if (Str($allAttributes['href'])->startsWith(['/', 'http://', 'https://', '#']) === false) {
-                $l->href =  URLTransformer::transform($allAttributes['href']);
+                $l->href = URLTransformer::transform($allAttributes['href']);
             }
 
         }

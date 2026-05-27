@@ -1,5 +1,8 @@
 <?php
 
+use Tobya\WebflowSiteConverter\Transformers\HtmlSiteTransformer;
+use Tobya\WebflowSiteConverter\Transformers\SiteTransformer;
+
 return [
 
     /*
@@ -14,9 +17,9 @@ return [
     |
     */
 
-    'blade_site_transformer' => \Tobya\WebflowSiteConverter\Transformers\SiteTransformer::class,
+    'blade_site_transformer' => SiteTransformer::class,
 
-    'html_site_transformer' => \Tobya\WebflowSiteConverter\Transformers\HtmlSiteTransformer::class,
+    'html_site_transformer' => HtmlSiteTransformer::class,
 
     /*
     |--------------------------------------------------------------------------
