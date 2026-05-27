@@ -121,10 +121,12 @@ class SiteTransformer
 
                 $this->extractAllSections($f);
 
+                $html = $this->getHTMLFileContent();
+                $html = $this->processTextReplacements($html);
                 // save
                 $this->st_wf_output_main->put(
                     $this->change_fileext($outputPath, $this->view_file_ext),
-                    $this->getHTMLFileContent()
+                    $html
                 );
             } else {
                 $this->processOtherFile($outputPath, $f);
@@ -224,10 +226,7 @@ class SiteTransformer
 
     public function getHTMLFileContent()
     {
-        return
-           $this->processTextReplacements(
-            $this->doc->html()
-           );
+        return  $this->doc->html();
     }
 
     public function extractSectionAsBlade($selector, ?callable $content = null)
@@ -404,6 +403,7 @@ class SiteTransformer
     }
 
     public function ProcessTextReplacements($html){
+        // replace text wihout loading to DOM
         foreach ($this->textreplacements as $replacement) {
             $html = Str($html)->replace($replacement[0], $replacement[1], false);
         }
