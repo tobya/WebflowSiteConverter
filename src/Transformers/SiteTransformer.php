@@ -226,7 +226,7 @@ class SiteTransformer
     {
         return
            $this->processTextReplacements(
-            $this->doc->html()
+               $this->doc->html()
            );
     }
 
@@ -306,12 +306,10 @@ class SiteTransformer
         return $info['dirname'].'/'.$info['filename'].'.'.$new_extension;
     }
 
-    public function ExtractTextAsBlade($textToExtract,string|callable $replacement, $path)
+    public function ExtractTextAsBlade($textToExtract, string|callable $replacement, $path)
     {
-        $this->log("Extracting Text: ", [$replacement, $path]);
+        $this->log('Extracting Text: ', [$replacement, $path]);
         $c = now()->format('iv');
-
-
 
         foreach ($this->doc->find($selector) as $div) {
             $this->log('Found section: ');
@@ -381,17 +379,17 @@ class SiteTransformer
             foreach ($elements as $element) {
 
                 $html = $element->outertext();
-                  //  echo $html;
-                  //  die();
+                //  echo $html;
+                //  die();
                 // echo "\n\n :::::::::::::::::::: \n\n";
                 //  echo $html;
                 $strHtml = Str($html);
                 if ($strHtml->contains($find)) {
-                    echo 'Big Copy ------------------------' . $html;
-                    $html =  $strHtml->replace($find, $replace, false)->toString();
-                    echo 'Big AFTER ------------------------' . $html;
+                    echo 'Big Copy ------------------------'.$html;
+                    $html = $strHtml->replace($find, $replace, false)->toString();
+                    echo 'Big AFTER ------------------------'.$html;
                     //  echo "\n\n --- \n\n";
-                      echo $html;
+                    echo $html;
                     //  echo "\n\n :::::::::::::::::::: \n\n";
                     $element->outertext = $html;
                 }
@@ -399,14 +397,14 @@ class SiteTransformer
 
         }
 
-
-
     }
 
-    public function ProcessTextReplacements($html){
+    public function ProcessTextReplacements($html)
+    {
         foreach ($this->textreplacements as $replacement) {
             $html = Str($html)->replace($replacement[0], $replacement[1], false);
         }
+
         return $html;
     }
 }
