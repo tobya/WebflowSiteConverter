@@ -227,7 +227,10 @@ class SiteTransformer
 
     public function getHTMLFileContent()
     {
-        return  $this->doc->html();
+        return
+           $this->processTextReplacements(
+               $this->doc->html()
+           );
     }
 
     public function extractSectionAsBlade($selector, ?callable $content = null)
@@ -306,12 +309,10 @@ class SiteTransformer
         return $info['dirname'].'/'.$info['filename'].'.'.$new_extension;
     }
 
-    public function ExtractTextAsBlade($textToExtract,string|callable $replacement, $path)
+    public function ExtractTextAsBlade($textToExtract, string|callable $replacement, $path)
     {
-        $this->log("Extracting Text: ", [$replacement, $path]);
+        $this->log('Extracting Text: ', [$replacement, $path]);
         $c = now()->format('iv');
-
-
 
         foreach ($this->doc->find($selector) as $div) {
             $this->log('Found section: ');
@@ -381,8 +382,8 @@ class SiteTransformer
             foreach ($elements as $element) {
 
                 $html = $element->outertext();
-                  //  echo $html;
-                  //  die();
+                //  echo $html;
+                //  die();
                 // echo "\n\n :::::::::::::::::::: \n\n";
                 //  echo $html;
                 $strHtml = Str($html);
@@ -398,8 +399,6 @@ class SiteTransformer
             }
 
         }
-
-
 
     }
 
