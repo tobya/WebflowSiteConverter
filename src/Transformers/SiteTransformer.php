@@ -141,7 +141,6 @@ class SiteTransformer
 
         $this->doc = new HtmlDomParser($content);
 
-
         // Find all link (not anchors) and transform
         // <link href="css/normalize.css" rel="stylesheet" type="text/css">
         // href must be set to an absolute url
@@ -388,9 +387,9 @@ class SiteTransformer
                 //  echo $html;
                 $strHtml = Str($html);
                 if ($strHtml->contains($find)) {
-                   // echo 'Big Copy ------------------------' . $html;
-                    $html =  $strHtml->replace($find, $replace, false)->toString();
-                   // echo 'Big AFTER ------------------------' . $html;
+                    // echo 'Big Copy ------------------------' . $html;
+                    $html = $strHtml->replace($find, $replace, false)->toString();
+                    // echo 'Big AFTER ------------------------' . $html;
                     //  echo "\n\n --- \n\n";
                     //  echo $html;
                     //  echo "\n\n :::::::::::::::::::: \n\n";
@@ -402,7 +401,8 @@ class SiteTransformer
 
     }
 
-    public function ProcessTextReplacements($html){
+    public function ProcessTextReplacements($html)
+    {
         // replace text wihout loading to DOM
         foreach ($this->textreplacements as $replacement) {
             $html = Str($html)->replace($replacement[0], $replacement[1], true);
